@@ -27,11 +27,13 @@ export class UsersRepository {
     if (!phoneNumber) return null;
     const trimmed = phoneNumber.trim();
     const clean = trimmed.replace(/[\s-]/g, '');
+    const escapedClean = clean.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regexPattern = escapedClean.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-?$2-?$3');
     return this.userModel.findOne({
       $or: [
         { phoneNumber: trimmed },
         { phoneNumber: clean },
-        { phoneNumber: { $regex: new RegExp(`^${clean.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-?$2-?$3')}$`) } },
+        { phoneNumber: { $regex: new RegExp(`^${regexPattern}$`) } },
       ],
     }).exec();
   }

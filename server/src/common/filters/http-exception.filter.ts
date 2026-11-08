@@ -33,8 +33,25 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const body = exceptionResponse as Record<string, unknown>;
         message = (body.message as string | string[]) ?? exception.message;
       }
+    } else if ((exception as any)?.code === 11000 || (exception as any)?.name === 'MongoServerError') {
+      status = HttpStatus.CONFLICT;
+      const keyPattern = (exception as any)?.keyPattern || (exception as any)?.keyValue;
+      if (keyPattern?.email) {
+        message = 'Email đã được sử dụng';
+      } else if (keyPattern?.phoneNumber) {
+        message = 'Số điện thoại đã được sử dụng';
+      } else if (keyPattern?.cardNumber) {
+        message = 'Số thẻ đã được sử dụng';
+      } else if (keyPattern?.accountNumber) {
+        message = 'Số tài khoản ví đã tồn tại';
+      } else {
+        message = 'Dữ liệu đã tồn tại trong hệ thống';
+      }
     } else if (exception instanceof Error) {
       this.logger.error(exception.message, exception.stack);
+      if (process.env.NODE_ENV !== 'production') {
+        message = exception.message;
+      }
     }
 
     response.status(status).json({

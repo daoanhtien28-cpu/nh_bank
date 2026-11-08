@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 async function seed() {
-  const uri = process.env.MONGODB_URI || 'mongodb+srv://daoanhtien232001_db_user:j1H0kU3Ffzqh3Q6y@cluster0.y32gcix.mongodb.net';
+  const uri = process.env.MONGODB_URI || 'mongodb+srv://daoanhtien232001_db_user:oezBzqK4wUMPyCHn@cluster0.toclsgc.mongodb.net';
   await mongoose.connect(uri);
   console.log('Connected to MongoDB Atlas');
 

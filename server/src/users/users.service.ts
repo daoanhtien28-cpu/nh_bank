@@ -14,7 +14,7 @@ import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepo: UsersRepository) {}
+  constructor(private readonly usersRepo: UsersRepository) { }
 
   async create(dto: CreateUserDto): Promise<UserDocument> {
     const normalizedEmail = dto.email.toLowerCase().trim();

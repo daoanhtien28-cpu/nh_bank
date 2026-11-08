@@ -24,20 +24,9 @@ export class UsersService {
     }
 
     const normalizedPhone = dto.phoneNumber ? dto.phoneNumber.trim() : undefined;
-    if (normalizedPhone) {
-      const existingPhone = await this.usersRepo.findByPhoneNumber(normalizedPhone);
-      if (existingPhone) {
-        throw new ConflictException('Số điện thoại đã được sử dụng');
-      }
-    }
 
-    let cardNumber = dto.cardNumber;
-    if (cardNumber) {
-      const existingCard = await this.usersRepo.findByCardNumber(cardNumber);
-      if (existingCard) {
-        throw new ConflictException('Số thẻ đã được sử dụng');
-      }
-    } else {
+    let cardNumber = dto.cardNumber ? dto.cardNumber.trim() : undefined;
+    if (!cardNumber) {
       cardNumber = await this.generateUniqueCardNumber();
     }
 
@@ -109,16 +98,7 @@ export class UsersService {
     }
 
     if (dto.phoneNumber !== undefined) {
-      const cleanPhone = dto.phoneNumber.trim();
-      if (cleanPhone) {
-        const existing = await this.usersRepo.findByPhoneNumber(cleanPhone);
-        if (existing && existing.id !== userId) {
-          throw new ConflictException('Số điện thoại đã được sử dụng');
-        }
-        updateData.phoneNumber = cleanPhone;
-      } else {
-        updateData.phoneNumber = undefined;
-      }
+      updateData.phoneNumber = dto.phoneNumber.trim() || undefined;
     }
 
     if (dto.email !== undefined) {

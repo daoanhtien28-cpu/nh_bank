@@ -7,10 +7,10 @@ export type UserDocument = User & Document;
 export class User {
   id: string; // Virtual property
 
-  @Prop({ unique: true, sparse: true, trim: true })
+  @Prop({ trim: true })
   cardNumber?: string;
 
-  @Prop({ unique: true, required: true, lowercase: true, trim: true, sparse: true })
+  @Prop({ unique: true, required: true, lowercase: true, trim: true })
   email: string;
 
   @Prop({ required: true })
@@ -19,7 +19,7 @@ export class User {
   @Prop({ trim: true })
   fullName?: string;
 
-  @Prop({ unique: true, sparse: true, trim: true })
+  @Prop({ trim: true })
   phoneNumber?: string;
 
   @Prop({ trim: true })
